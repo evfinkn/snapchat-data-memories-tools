@@ -90,6 +90,27 @@ with open(file=new_html_file, mode="w", encoding="utf_8") as new_html_file:
             .bold-headers th {
                 font-weight: 600;
             }
+            
+            .options-dropdown {
+                position: relative;
+                display: inline-block;
+            }
+            
+            .options-dropdown ul {
+                display: none;
+                position: absolute;
+                min-width: 100%;
+                z-index: 1;
+                left: 0;
+            }
+            
+            .options-dropdown:hover ul {
+                display: block;
+            }
+            
+            .options-dropdown ul li {
+                display: block;
+            }
 
         </style>
     </head>
@@ -151,20 +172,6 @@ with open(file=new_html_file, mode="w", encoding="utf_8") as new_html_file:
                 {
                     navigator.clipboard.writeText(path + fileLocalPath);
                 }
-                function reverseTable() {
-                    let table = document.getElementsByTagName("table")[0];
-                    let rows = table.rows;
-                    let newTBody = table.createTBody();
-                    newTBody.appendChild(rows[0]);
-                    for (let i = rows.length - 1; i >= 0; i--)
-                    {
-                        newTBody.appendChild(rows[i]);
-                    }
-                    table.removeChild(table.getElementsByTagName("tbody")[0]);
-                    let sort = document.getElementById("sort");
-                    if (sort.innerHTML == "▼") {sort.innerHTML = "▲";}
-                    else {sort.innerHTML = "▼";}
-                }
             </script>
             <script type="module">
                 let images = document.getElementsByTagName("img");
@@ -181,13 +188,33 @@ with open(file=new_html_file, mode="w", encoding="utf_8") as new_html_file:
                                 Date <a id="sort" href="javascript:reverseTable();" style="text-decoration:inherit;color:inherit;">▼</a>
                             </strong>
                         </th>
-                        <th style="white-space: nowrap; overflow: hidden;">
+                        <th style="white-space: nowrap;" class="options-dropdown">
                             <strong>Media Type</strong>
+                            <ul class="options-list">
+                                <li><a href="javascript:toggleImages();">Show Images</a></li>
+                                <li><a href="javascript:toggleVideos();">Show Videos</a></li>
+                            </ul>
                         </th>
                         <th style="white-space: nowrap; overflow: hidden;">
                             <strong> </strong>
                         </th>
-                    </tr>""")
+                    </tr>
+                    <script>
+                        const table = document.getElementById("table");
+                        const rows = table.rows;
+                        const sort = document.getElementById("sort");
+                        function reverseTable() {
+                            let newTBody = table.createTBody();
+                            newTBody.appendChild(rows[0]);
+                            for (let i = rows.length - 1; i >= 0; i--)
+                            {
+                                newTBody.appendChild(rows[i]);
+                            }
+                            table.removeChild(table.getElementsByTagName("tbody")[0]);
+                            if (sort.innerHTML == "▼") {sort.innerHTML = "▲";}
+                            else {sort.innerHTML = "▼";}
+                        }
+                    </script>""")
 
     regex = re.compile(r"(?<=<td>).*?(?=</td>)", flags=re.S)
     rows = re.findall(r"(?<=<tr>).*?(?=</tr>)", string=old_html, flags=re.S)
@@ -222,6 +249,22 @@ with open(file=new_html_file, mode="w", encoding="utf_8") as new_html_file:
     new_html_file.write("""
                 </tbody>
             </table>
+            <script>
+                const images = document.getElementsByClassName("image");
+                const videos = document.getElementsByClassName("video");
+                const imageCheckmark = document.getElementById("image-checkmark");
+                const videoCheckmark = document.getElementById("video-checkmark");
+                let hideImages = false;
+                let hideVideos = false;
+                function toggleImages() {
+                    hideImages = !hideImages;
+                    Array.from(images).forEach((element) => {element.parentNode.hidden = hideImages});
+                }
+                function toggleVideos() {
+                    hideVideos = !hideVideos;
+                    Array.from(videos).forEach((element) => {element.parentNode.hidden = hideVideos});
+                }
+            </script>
         </div>
     </body>
 </html>""")

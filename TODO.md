@@ -9,9 +9,11 @@
   - [ ] Usage instructions
     - [ ] How to run in console
   - [ ] Add note that images and videos made at exact same time will change to have a difference of 1 second each
-  - [ ] Note that 
 - [ ] Add comments to code
 - [ ] Finish create_html.py
+  - [ ] Add note at top that says hovering over "Media Type" reveals toggles
+  - [ ] Add note that clicking on a thumbnail copies filepath to clipboard
+  - [ ] If possible, add / before filepath if on Mac (and Linux if applicable)
 - [ ] Remove PyExifTool dependency and use subprocess module instead
 
 ### Medium priority
@@ -29,4 +31,6 @@
 	- [ ] Option to embed images and videos anyway (using expansion technique on point above this one)
   - [ ] Add new arguments to README.md as implemented
 - [ ] Add note to README.md that the original plan was to have the actual images and videos on the webpage, but Firefox doesn't support videos encoded with HEVC
+
+### Low priority
 - [ ] Possibly make FFmpeg script that transcodes videos, even though not recommended (very time consuming to transcode)
